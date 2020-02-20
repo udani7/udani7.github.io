@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<style>
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+}
+
+td, th {
+  border: 2px solid #000000;
+  padding: 8px;
+  text-align: center;
+  white-space:pre;
+  font-size: 16px;
+}
+
+li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>ADATOK</h1><br>
+
+<table id="PersonalData">
+  <tr>
+    <th>Név</th>
+    <th></th>
+  </tr>
+    <tr>
+    <th>Születési idő</th>
+    <th></th>
+  </tr>
+    <tr>
+    <th>Születési hely</th>
+    <th></th>
+  </tr>
+    <tr>
+    <th>Halálozási idő</th>
+    <th></th>
+  </tr>
+    <tr>
+    <th>Halálozási hely</th>
+    <th></th>
+  </tr>
+    <tr>
+    <th>Szülők</th>
+    <th></th>
+  </tr>
+    <tr>
+    <th>Gyermekek</th>
+    <th></th>
+  </tr>
+    <tr>
+    <th>Élettársak</th>
+    <th></th>
+  </tr>
+</table>
+
+<script src = "database.js"></script>
+
+<script type = "text/javascript">
+
+var table = document.getElementById("PersonalData");
+
+function fillTable(code) {
+
+  var person = database.get(code);
+  localStorage.setItem("id", code);
+  document.title = person.name;
+  var cell = table.rows[0].cells[1];
+  cell.innerHTML = person.name.link("person.html");
+  cell.id = code;
+  cell.addEventListener("click", function(event) {
+    event.preventDefault();
+    history.pushState({ "id": this.id }, "", "data.html");
+    fillTable(this.id);
+  });
+  table.rows[1].cells[1].innerHTML = person.birthtime;
+  table.rows[2].cells[1].innerHTML = person.birthplace;
+  table.rows[3].cells[1].innerHTML = person.deathtime;
+  table.rows[4].cells[1].innerHTML = person.deathplace;
+  cell = table.rows[5].cells[1];
+  while (cell.firstChild) cell.removeChild(cell.lastChild);
+  for (var i = 0; i != person.parents.length; ++i) {
+    var relative = database.get(person.parents[i]);
+    if (!relative) continue;
+    var li = document.createElement("li");
+    li.innerHTML = relative.name.link("person.html");
+    li.id = person.parents[i];
+    li.addEventListener("click", function(event) {
+      event.preventDefault();
+      history.pushState({ "id": this.id }, "", "data.html");
+      fillTable(this.id);
+    });
+    cell.appendChild(li);
+  }
+  cell = table.rows[6].cells[1];
+  while (cell.firstChild) cell.removeChild(cell.lastChild);
+  for (var i = 0; i != person.children.length; ++i) {
+    var relative = database.get(person.children[i]);
+    if (!relative) continue;
+    var li = document.createElement("li");
+    li.innerHTML = relative.name.link("person.html");
+    li.id = person.children[i];
+    li.addEventListener("click", function(event) {
+      event.preventDefault();
+      history.pushState({ "id": this.id }, "", "data.html");
+      fillTable(this.id);
+    });
+    cell.appendChild(li);
+  }
+  cell = table.rows[7].cells[1];
+  while (cell.firstChild) cell.removeChild(cell.lastChild);
+  for (var i = 0; i != person.partners.length; ++i) {
+    var relative = database.get(person.partners[i]);
+    if (!relative) continue;
+    var li = document.createElement("li");
+    li.innerHTML = relative.name.link("person.html");
+    li.id = person.partners[i];
+    li.addEventListener("click", function(event) {
+      event.preventDefault();
+      history.pushState({ "id": this.id }, "", "data.html");
+      fillTable(this.id);
+    });
+    cell.appendChild(li);
+  }
+}
+
+base_code = localStorage.getItem("id");
+fillTable(base_code);
+
+window.addEventListener('popstate', function(event) {
+  var history_code = JSON.stringify(event.state).replace(/\D/g,'');
+  if (database.get(history_code)) fillTable(history_code);
+  else fillTable(base_code);
+});
+
+</script>
+
+</body>
+
+</html>
