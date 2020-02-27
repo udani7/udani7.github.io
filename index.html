@@ -110,7 +110,7 @@ function fillTable() {
       var row = table.insertRow();
       row.insertCell(0).innerHTML = table.rows.length - 1;
       var cell = row.insertCell(1)
-      cell.innerHTML = person.name.link("data.html");
+      cell.innerHTML = "<a href=\"" + "data.html" + "\" target=\"_blank\">" + person.name + "</a>";
       cell.id = code;
       cell.addEventListener("click", function(event) {
         localStorage.setItem("id", this.id);
@@ -124,7 +124,7 @@ function fillTable() {
         var relative = database.get(person.parents[i]);
         if (!relative) continue;
         var li = document.createElement("li");
-        li.innerHTML = relative.name.link("data.html");
+        li.innerHTML = "<a href=\"" + "data.html" + "\" target=\"_blank\">" + relative.name + "</a>";
         li.id = person.parents[i];
         li.addEventListener("click", function(event) {
           localStorage.setItem("id", this.id);
@@ -136,7 +136,7 @@ function fillTable() {
         var relative = database.get(person.children[i]);
         if (!relative) continue;
         var li = document.createElement("li");
-        li.innerHTML = relative.name.link("data.html");
+        li.innerHTML = "<a href=\"" + "data.html" + "\" target=\"_blank\">" + relative.name + "</a>";
         li.id = person.children[i];
         li.addEventListener("click", function(event) {
           localStorage.setItem("id", this.id);
@@ -148,7 +148,7 @@ function fillTable() {
         var relative = database.get(person.partners[i]);
         if (!relative) continue;
         var li = document.createElement("li");
-        li.innerHTML = relative.name.link("data.html");
+        li.innerHTML = "<a href=\"" + "data.html" + "\" target=\"_blank\">" + relative.name + "</a>";
         li.id = person.partners[i];
         li.addEventListener("click", function(event) {
           localStorage.setItem("id", this.id);
